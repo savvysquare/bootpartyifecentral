@@ -4,12 +4,41 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { toast } from "sonner";
 import { CheckCircle2, ExternalLink } from "lucide-react";
+
+// Ife Central LGA wards (Osun State), in their official order.
+const IFE_CENTRAL_WARDS = [
+  "Akarabata",
+  "Iremo I",
+  "Iremo II",
+  "Iremo III",
+  "Iremo IV",
+  "Iremo V",
+  "Ilare I",
+  "Ilare II",
+  "Ilare III",
+  "Ilare IV",
+  "More / Okerewe",
+];
+
+const GENDERS = ["Female", "Male", "Prefer not to say"];
+
+const AGE_RANGES = ["18–24", "25–34", "35–44", "45–54", "55–64", "65+"];
 
 export function RegistrationForm() {
   const [loading, setLoading] = useState(false);
   const [done, setDone] = useState(false);
+  const [ward, setWard] = useState("");
+  const [gender, setGender] = useState("");
+  const [ageRange, setAgeRange] = useState("");
 
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -18,10 +47,10 @@ export function RegistrationForm() {
       full_name: String(fd.get("full_name") || "").trim(),
       phone: String(fd.get("phone") || "").trim(),
       email: String(fd.get("email") || "").trim() || null,
-      ward: String(fd.get("ward") || "").trim() || null,
+      ward: ward || null,
       address: String(fd.get("address") || "").trim() || null,
-      gender: String(fd.get("gender") || "").trim() || null,
-      age_range: String(fd.get("age_range") || "").trim() || null,
+      gender: gender || null,
+      age_range: ageRange || null,
       message: String(fd.get("message") || "").trim() || null,
     };
 
@@ -84,9 +113,29 @@ export function RegistrationForm() {
         <Field label="Full name *" name="full_name" required placeholder="e.g. Adebayo Adeyemi" />
         <Field label="Phone number *" name="phone" required type="tel" placeholder="080xxxxxxxx" />
         <Field label="Email" name="email" type="email" placeholder="you@example.com" />
-        <Field label="Ward in Ife Central" name="ward" placeholder="e.g. Ilare I" />
-        <Field label="Gender" name="gender" placeholder="Female / Male / Other" />
-        <Field label="Age range" name="age_range" placeholder="18–24, 25–34, 35–44..." />
+
+        <SelectField
+          label="Ward in Ife Central"
+          placeholder="Select your ward"
+          value={ward}
+          onChange={setWard}
+          options={IFE_CENTRAL_WARDS}
+        />
+        <SelectField
+          label="Gender"
+          placeholder="Select gender"
+          value={gender}
+          onChange={setGender}
+          options={GENDERS}
+        />
+        <SelectField
+          label="Age range"
+          placeholder="Select age range"
+          value={ageRange}
+          onChange={setAgeRange}
+          options={AGE_RANGES}
+        />
+
         <div className="md:col-span-2">
           <Field label="Residential address" name="address" placeholder="Street, area, Ile-Ife" />
         </div>
@@ -134,6 +183,38 @@ function Field({
     <div className="grid gap-2">
       <Label htmlFor={name}>{label}</Label>
       <Input id={name} name={name} type={type} placeholder={placeholder} required={required} />
+    </div>
+  );
+}
+
+function SelectField({
+  label,
+  placeholder,
+  value,
+  onChange,
+  options,
+}: {
+  label: string;
+  placeholder: string;
+  value: string;
+  onChange: (v: string) => void;
+  options: string[];
+}) {
+  return (
+    <div className="grid gap-2">
+      <Label>{label}</Label>
+      <Select value={value} onValueChange={onChange}>
+        <SelectTrigger>
+          <SelectValue placeholder={placeholder} />
+        </SelectTrigger>
+        <SelectContent>
+          {options.map((o) => (
+            <SelectItem key={o} value={o}>
+              {o}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
     </div>
   );
 }
