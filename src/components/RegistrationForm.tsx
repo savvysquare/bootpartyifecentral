@@ -82,10 +82,10 @@ export function RegistrationForm() {
 
   if (done) {
     return (
-      <div className="rounded-2xl border border-border bg-card p-8 md:p-10">
+      <div className="rounded-2xl border border-border bg-card p-5 md:p-10">
         <div className="flex items-start gap-4">
-          <CheckCircle2 className="mt-1 size-7 text-primary" />
-          <div>
+          <CheckCircle2 className="mt-1 size-7 shrink-0 text-primary" />
+          <div className="min-w-0 flex-1">
             <h3 className="text-2xl font-semibold">You're on the list.</h3>
             <p className="mt-2 text-muted-foreground">
               Thank you for joining the Ife Central arm of the BOOT Party. This
@@ -94,14 +94,14 @@ export function RegistrationForm() {
               of the party, please complete the official registration on the
               main BOOT website.
             </p>
-            <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
-              <Button asChild size="lg" className="w-full sm:w-auto bg-accent text-accent-foreground hover:bg-accent/90">
+            <div className="mt-6 flex flex-col gap-3">
+              <Button asChild size="lg" className="w-full bg-accent text-accent-foreground hover:bg-accent/90">
                 <a href="https://boot.org.ng/join-us/" target="_blank" rel="noopener noreferrer">
                   Register on the main BOOT site
                   <ExternalLink className="ml-1 size-4" />
                 </a>
               </Button>
-              <Button asChild size="lg" variant="outline" className="w-full sm:w-auto">
+              <Button asChild size="lg" variant="outline" className="w-full">
                 <a href="https://boot.org.ng/" target="_blank" rel="noopener noreferrer">
                   Visit boot.org.ng
                 </a>
