@@ -2,48 +2,17 @@
 import { createClient } from '@supabase/supabase-js';
 import type { Database } from './types';
 
-function createSupabaseClient() {
-  const HARDCODED_URL = "https://aspxddecqqosyyaxflcf.supabase.co";
-  const HARDCODED_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFzcHhkZGVjcXFvc3l5YXhmbGNmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkzNjUxNDEsImV4cCI6MjA5NDk0MTE0MX0.aFkVnKVih_jBtsrYs0yTF5SkvcX01AjY1IFpxXc3g0U";
+// The anon key is a public/publishable credential — safe to embed in client-side code.
+// Using hardcoded values ensures we always connect to the correct project,
+// regardless of what environment variables Vercel may or may not have set.
+const SUPABASE_URL = "https://aspxddecqqosyyaxflcf.supabase.co";
+const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFzcHhkZGVjcXFvc3l5YXhmbGNmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkzNjUxNDEsImV4cCI6MjA5NDk0MTE0MX0.aFkVnKVih_jBtsrYs0yTF5SkvcX01AjY1IFpxXc3g0U";
 
-  const rawUrl =
-    import.meta.env.VITE_SUPABASE_URL ||
-    process.env.SUPABASE_URL;
-
-  const rawKey =
-    import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY ||
-    import.meta.env.VITE_SUPABASE_ANON_KEY ||
-    process.env.SUPABASE_PUBLISHABLE_KEY ||
-    process.env.SUPABASE_ANON_KEY;
-
-  const isValidUrl = (url?: string) => {
-    return url && typeof url === 'string' && url.startsWith("https://") && url.includes(".supabase.co");
-  };
-
-  const isValidKey = (key?: string) => {
-    return key && typeof key === 'string' && key.length > 50;
-  };
-
-  const SUPABASE_URL = isValidUrl(rawUrl) ? rawUrl : HARDCODED_URL;
-  const SUPABASE_PUBLISHABLE_KEY = isValidKey(rawKey) ? rawKey : HARDCODED_KEY;
-
-  return createClient<Database>(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY, {
-    auth: {
-      storage: typeof window !== 'undefined' ? localStorage : undefined,
-      persistSession: true,
-      autoRefreshToken: true,
-    }
-  });
-}
-
-let _supabase: ReturnType<typeof createSupabaseClient> | undefined;
-
-// Import the supabase client like this:
-// import { supabase } from "@/integrations/supabase/client";
-export const supabase = new Proxy({} as ReturnType<typeof createSupabaseClient>, {
-  get(_, prop, receiver) {
-    if (!_supabase) _supabase = createSupabaseClient();
-    return Reflect.get(_supabase, prop, receiver);
+export const supabase = createClient<Database>(SUPABASE_URL, SUPABASE_ANON_KEY, {
+  auth: {
+    storage: typeof window !== 'undefined' ? localStorage : undefined,
+    persistSession: true,
+    autoRefreshToken: true,
   },
 });
 
