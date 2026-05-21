@@ -3,25 +3,29 @@ import { createClient } from '@supabase/supabase-js';
 import type { Database } from './types';
 
 function createSupabaseClient() {
-  // Use import.meta.env for client-side (Vite build-time replacement)
-  // Fall back to process.env for SSR (server-side rendering)
-  const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL || process.env.SUPABASE_URL;
-  // Support both key names — Lovable uses PUBLISHABLE_KEY, Vercel dashboard commonly uses ANON_KEY
-  const SUPABASE_PUBLISHABLE_KEY =
+  const HARDCODED_URL = "https://aspxddecqqosyyaxflcf.supabase.co";
+  const HARDCODED_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFzcHhkZGVjcXFvc3l5YXhmbGNmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkzNjUxNDEsImV4cCI6MjA5NDk0MTE0MX0.aFkVnKVih_jBtsrYs0yTF5SkvcX01AjY1IFpxXc3g0U";
+
+  const rawUrl =
+    import.meta.env.VITE_SUPABASE_URL ||
+    process.env.SUPABASE_URL;
+
+  const rawKey =
     import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY ||
     import.meta.env.VITE_SUPABASE_ANON_KEY ||
     process.env.SUPABASE_PUBLISHABLE_KEY ||
     process.env.SUPABASE_ANON_KEY;
 
-  if (!SUPABASE_URL || !SUPABASE_PUBLISHABLE_KEY) {
-    const missing = [
-      ...(!SUPABASE_URL ? ['VITE_SUPABASE_URL'] : []),
-      ...(!SUPABASE_PUBLISHABLE_KEY ? ['VITE_SUPABASE_PUBLISHABLE_KEY or VITE_SUPABASE_ANON_KEY'] : []),
-    ];
-    const message = `Missing Supabase environment variable(s): ${missing.join(', ')}. Add them in your Vercel project settings.`;
-    console.error(`[Supabase] ${message}`);
-    throw new Error(message);
-  }
+  const isValidUrl = (url?: string) => {
+    return url && typeof url === 'string' && url.startsWith("https://") && url.includes(".supabase.co");
+  };
+
+  const isValidKey = (key?: string) => {
+    return key && typeof key === 'string' && key.length > 50;
+  };
+
+  const SUPABASE_URL = isValidUrl(rawUrl) ? rawUrl : HARDCODED_URL;
+  const SUPABASE_PUBLISHABLE_KEY = isValidKey(rawKey) ? rawKey : HARDCODED_KEY;
 
   return createClient<Database>(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY, {
     auth: {
