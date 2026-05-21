@@ -68,50 +68,10 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
 }
 
 export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()({
-  head: () => ({
-    meta: [
-      { charSet: "utf-8" },
-      { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "BOOT Party — Ife Central" },
-      { name: "description", content: "Register with the Ife Central arm of the BOOT Party." },
-      { property: "og:title", content: "BOOT Party — Ife Central" },
-      { name: "twitter:title", content: "BOOT Party — Ife Central" },
-      { property: "og:description", content: "Register with the Ife Central arm of the BOOT Party." },
-      { name: "twitter:description", content: "Register with the Ife Central arm of the BOOT Party." },
-      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/e4c31084-dc4b-4c7b-b5de-27aa36a1c127/id-preview-24f093a6--429e674e-19b4-4c8b-ae3d-9303fb10c851.lovable.app-1779370490507.png" },
-      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/e4c31084-dc4b-4c7b-b5de-27aa36a1c127/id-preview-24f093a6--429e674e-19b4-4c8b-ae3d-9303fb10c851.lovable.app-1779370490507.png" },
-      { name: "twitter:card", content: "summary_large_image" },
-      { property: "og:type", content: "website" },
-    ],
-    links: [
-      { rel: "stylesheet", href: appCss },
-      { rel: "preconnect", href: "https://fonts.googleapis.com" },
-      { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
-      {
-        rel: "stylesheet",
-        href: "https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap",
-      },
-    ],
-  }),
-  shellComponent: RootShell,
   component: RootComponent,
   notFoundComponent: NotFoundComponent,
   errorComponent: ErrorComponent,
 });
-
-function RootShell({ children }: { children: React.ReactNode }) {
-  return (
-    <html lang="en">
-      <head>
-        <HeadContent />
-      </head>
-      <body>
-        {children}
-        <Scripts />
-      </body>
-    </html>
-  );
-}
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();

@@ -1,7 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useServerFn } from "@tanstack/react-start";
 import { useState } from "react";
-import { getRegistrations } from "@/lib/members.functions";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -79,7 +77,6 @@ function download(filename: string, content: string, mime: string) {
 }
 
 function MembersPage() {
-  const fetchRegistrations = useServerFn(getRegistrations);
   const [password, setPassword] = useState("");
   const [rows, setRows] = useState<Row[] | null>(null);
   const [loading, setLoading] = useState(false);
@@ -120,11 +117,6 @@ function MembersPage() {
       if (apiError) {
         toast.error(apiError);
         return;
-      }
-
-      if (!dataRows) {
-        const res = await fetchRegistrations({ data: { password } });
-        dataRows = res.rows as Row[];
       }
 
       if (dataRows) {
