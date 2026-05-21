@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Download, FileText, Lock } from "lucide-react";
 import { toast } from "sonner";
+import { supabase } from "@/integrations/supabase/client";
 
 export const Route = createFileRoute("/members")({
   head: () => ({
@@ -29,6 +30,8 @@ type Row = {
   message: string | null;
   created_at: string;
 };
+
+const MEMBERS_PASSWORD = "sterces";
 
 const COLUMNS: { key: keyof Row; label: string }[] = [
   { key: "created_at", label: "Submitted" },
@@ -83,49 +86,24 @@ function MembersPage() {
 
   async function unlock(e: React.FormEvent) {
     e.preventDefault();
+
+    if (password !== MEMBERS_PASSWORD) {
+      toast.error("Invalid password");
+      return;
+    }
+
     setLoading(true);
     try {
-      let dataRows: Row[] | null = null;
-      let apiError: string | null = null;
-      
-      try {
-        const response = await fetch('/api/registrations', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ password })
-        });
-        
-        if (response.status === 401) {
-          throw new Error("Invalid password");
-        }
-        
-        const contentType = response.headers.get("content-type");
-        if (contentType && contentType.includes("application/json")) {
-          const json = await response.json();
-          if (response.ok) {
-            dataRows = json.rows;
-          } else {
-            apiError = json.error || "API Error";
-          }
-        } else if (!response.ok) {
-          apiError = "API Error " + response.status;
-        }
-      } catch (err: any) {
-        if (err.message === "Invalid password") throw err;
-      }
+      const { data, error } = await supabase
+        .from("registrations")
+        .select("*")
+        .order("created_at", { ascending: false });
 
-      if (apiError) {
-        toast.error(apiError);
-        return;
-      }
+      if (error) throw error;
 
-      if (dataRows) {
-        setRows(dataRows);
-      } else {
-        throw new Error("Failed to fetch");
-      }
-    } catch {
-      toast.error("Invalid password");
+      setRows(data ?? []);
+    } catch (err: any) {
+      toast.error(`Failed to load: ${err?.message ?? "Unknown error"}`);
     } finally {
       setLoading(false);
     }
@@ -157,7 +135,7 @@ function MembersPage() {
             />
           </div>
           <Button type="submit" className="mt-6 w-full" disabled={loading}>
-            {loading ? "Verifying…" : "Unlock"}
+            {loading ? "Loading…" : "Unlock"}
           </Button>
         </form>
       </div>
