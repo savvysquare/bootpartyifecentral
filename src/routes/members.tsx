@@ -89,6 +89,7 @@ function MembersPage() {
     setLoading(true);
     try {
       let dataRows: Row[] | null = null;
+      let apiError: string | null = null;
       
       try {
         const response = await fetch('/api/registrations', {
@@ -102,12 +103,23 @@ function MembersPage() {
         }
         
         const contentType = response.headers.get("content-type");
-        if (response.ok && contentType && contentType.includes("application/json")) {
+        if (contentType && contentType.includes("application/json")) {
           const json = await response.json();
-          dataRows = json.rows;
+          if (response.ok) {
+            dataRows = json.rows;
+          } else {
+            apiError = json.error || "API Error";
+          }
+        } else if (!response.ok) {
+          apiError = "API Error " + response.status;
         }
       } catch (err: any) {
         if (err.message === "Invalid password") throw err;
+      }
+
+      if (apiError) {
+        toast.error(apiError);
+        return;
       }
 
       if (!dataRows) {
