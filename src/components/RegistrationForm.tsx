@@ -73,10 +73,8 @@ export function RegistrationForm() {
       toast.success("Registration received. Welcome to BOOT — Ife Central.");
     } catch (err: any) {
       console.error("Submission error:", err);
-      toast.error(err?.message?.includes("Missing Supabase")
-        ? "Configuration error — please contact the site admin."
-        : "Could not submit. Please try again."
-      );
+      const errMsg = err?.message || err?.error_description || JSON.stringify(err);
+      toast.error(`Could not submit: ${errMsg}`);
     } finally {
       setLoading(false);
     }
