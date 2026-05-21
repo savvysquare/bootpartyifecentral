@@ -95,17 +95,23 @@ export function RegistrationForm() {
               main BOOT website.
             </p>
             <div className="mt-6 flex flex-col gap-3">
-              <Button asChild size="lg" className="w-full bg-accent text-accent-foreground hover:bg-accent/90">
-                <a href="https://boot.org.ng/join-us/" target="_blank" rel="noopener noreferrer">
-                  Register on the main BOOT site
-                  <ExternalLink className="ml-1 size-4" />
-                </a>
-              </Button>
-              <Button asChild size="lg" variant="outline" className="w-full">
-                <a href="https://boot.org.ng/" target="_blank" rel="noopener noreferrer">
-                  Visit boot.org.ng
-                </a>
-              </Button>
+              <a
+                href="https://boot.org.ng/join-us/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex w-full items-center justify-center gap-2 rounded-md bg-accent px-6 py-3 text-sm font-semibold text-accent-foreground transition-colors hover:bg-accent/90"
+              >
+                Register on the main BOOT site
+                <ExternalLink className="size-4 shrink-0" />
+              </a>
+              <a
+                href="https://boot.org.ng/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex w-full items-center justify-center rounded-md border border-border px-6 py-3 text-sm font-semibold transition-colors hover:bg-muted"
+              >
+                Visit boot.org.ng
+              </a>
             </div>
           </div>
         </div>
