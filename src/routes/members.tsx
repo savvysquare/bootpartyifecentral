@@ -99,10 +99,15 @@ function MembersPage() {
         .select("*")
         .order("created_at", { ascending: false });
 
-      if (error) throw error;
+      console.log("Supabase response:", { data, error });
+
+      if (error) {
+        throw new Error(`Supabase error: ${error.message} (code: ${error.code})`);
+      }
 
       setRows(data ?? []);
     } catch (err: any) {
+      console.error("Members load error:", err);
       toast.error(`Failed to load: ${err?.message ?? "Unknown error"}`);
     } finally {
       setLoading(false);
