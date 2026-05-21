@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { ExternalLink, ArrowRight } from "lucide-react";
-import bootLogo from "@/assets/boot-logo.png";
-import ifeHero from "@/assets/ife-community.jpg";
+import bootLogo from "@/assets/boot-logo.webp";
+import ifeHero from "@/assets/ife-community.webp";
 import { RegistrationForm } from "@/components/RegistrationForm";
 import { Toaster } from "@/components/ui/sonner";
 import { Button } from "@/components/ui/button";
