@@ -43,8 +43,14 @@ export function RegistrationForm() {
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const fd = new FormData(e.currentTarget);
+
+    const firstName = String(fd.get("first_name") || "").trim();
+    const middleName = String(fd.get("middle_name") || "").trim();
+    const surname = String(fd.get("surname") || "").trim();
+    const fullName = [firstName, middleName, surname].filter(Boolean).join(" ");
+
     const payload = {
-      full_name: String(fd.get("full_name") || "").trim(),
+      full_name: fullName,
       phone: String(fd.get("phone") || "").trim(),
       email: String(fd.get("email") || "").trim() || null,
       ward: ward || null,
@@ -54,21 +60,26 @@ export function RegistrationForm() {
       message: String(fd.get("message") || "").trim() || null,
     };
 
-    if (!payload.full_name || !payload.phone) {
-      toast.error("Full name and phone number are required.");
+    if (!firstName || !surname || !payload.phone) {
+      toast.error("First name, surname, and phone number are required.");
       return;
     }
 
     setLoading(true);
-    const { error } = await supabase.from("registrations").insert(payload);
-    setLoading(false);
-
-    if (error) {
-      toast.error("Could not submit. Please try again.");
-      return;
+    try {
+      const { error } = await supabase.from("registrations").insert(payload);
+      if (error) throw error;
+      setDone(true);
+      toast.success("Registration received. Welcome to BOOT — Ife Central.");
+    } catch (err: any) {
+      console.error("Submission error:", err);
+      toast.error(err?.message?.includes("Missing Supabase")
+        ? "Configuration error — please contact the site admin."
+        : "Could not submit. Please try again."
+      );
+    } finally {
+      setLoading(false);
     }
-    setDone(true);
-    toast.success("Registration received. Welcome to BOOT — Ife Central.");
   }
 
   if (done) {
@@ -110,7 +121,9 @@ export function RegistrationForm() {
       className="rounded-2xl border border-border bg-card p-6 md:p-10 shadow-sm"
     >
       <div className="grid gap-5 md:grid-cols-2">
-        <Field label="Full name *" name="full_name" required placeholder="e.g. Adebayo Adeyemi" />
+        <Field label="First name *" name="first_name" required placeholder="e.g. Adebayo" />
+        <Field label="Middle name" name="middle_name" placeholder="Optional" />
+        <Field label="Surname *" name="surname" required placeholder="e.g. Adeyemi" />
         <Field label="Phone number *" name="phone" required type="tel" placeholder="080xxxxxxxx" />
         <Field label="Email" name="email" type="email" placeholder="you@example.com" />
 
