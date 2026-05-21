@@ -88,8 +88,38 @@ function MembersPage() {
     e.preventDefault();
     setLoading(true);
     try {
-      const res = await fetchRegistrations({ data: { password } });
-      setRows(res.rows as Row[]);
+      let dataRows: Row[] | null = null;
+      
+      try {
+        const response = await fetch('/api/registrations', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ password })
+        });
+        
+        if (response.status === 401) {
+          throw new Error("Invalid password");
+        }
+        
+        const contentType = response.headers.get("content-type");
+        if (response.ok && contentType && contentType.includes("application/json")) {
+          const json = await response.json();
+          dataRows = json.rows;
+        }
+      } catch (err: any) {
+        if (err.message === "Invalid password") throw err;
+      }
+
+      if (!dataRows) {
+        const res = await fetchRegistrations({ data: { password } });
+        dataRows = res.rows as Row[];
+      }
+
+      if (dataRows) {
+        setRows(dataRows);
+      } else {
+        throw new Error("Failed to fetch");
+      }
     } catch {
       toast.error("Invalid password");
     } finally {
