@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { ExternalLink, ArrowRight } from "lucide-react";
 import bootLogo from "@/assets/boot-logo.webp";
 import ifeHero from "@/assets/ife-community.webp";
@@ -245,6 +245,11 @@ function Footer() {
                  href={JOIN_URL} target="_blank" rel="noopener noreferrer">
                 Full party registration <ExternalLink className="size-3.5" />
               </a>
+            </li>
+            <li>
+              <Link to="/members" className="hover:underline">
+                Members Portal
+              </Link>
             </li>
           </ul>
         </div>
