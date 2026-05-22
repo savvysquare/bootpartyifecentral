@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Download, FileText, Lock } from "lucide-react";
 import { toast } from "sonner";
+import { supabase } from "@/integrations/supabase/client";
 
 export const Route = createFileRoute("/members")({
   head: () => ({
@@ -93,19 +94,13 @@ function MembersPage() {
 
     setLoading(true);
     try {
-      const res = await fetch("/api/registrations", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ password }),
-      });
+      const { data, error } = await (supabase as any).rpc("get_registrations", { pass: password });
 
-      const json = await res.json();
-
-      if (!res.ok) {
-        throw new Error(json.error || `Server error ${res.status}`);
+      if (error) {
+        throw new Error(error.message);
       }
 
-      setRows(json.rows ?? []);
+      setRows(data ?? []);
     } catch (err: any) {
       console.error("Members load error:", err);
       toast.error(`Failed to load: ${err?.message ?? "Unknown error"}`);
