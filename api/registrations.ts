@@ -6,7 +6,7 @@ const MEMBERS_PASSWORD = "sterces";
 // A SELECT RLS policy allows the anon key to read. The password above
 // is the access control gate for this endpoint.
 const SUPABASE_URL = "https://aspxddecqqosyyaxflcf.supabase.co";
-const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFzcHhkZGVjcXFvc3l5YXhmbGNmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkzNjUxNDEsImV4cCI6MjA5NDk0MTE0MX0.aFkVnKVih_jBtsrYs0yTF5SkvcX01AjY1IFpxXc3g0U";
+const SUPABASE_SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
 export default async function handler(req: any, res: any) {
   if (req.method !== 'POST') {
@@ -20,7 +20,7 @@ export default async function handler(req: any, res: any) {
   }
 
   try {
-    const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+    const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY!, {
       auth: {
         persistSession: false,
         autoRefreshToken: false,
