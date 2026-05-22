@@ -24,6 +24,12 @@ export default defineConfig({
   build: {
     outDir: "dist/client",
     emptyOutDir: true,
+    rollupOptions: {
+      input: {
+        main: path.resolve(__dirname, "index.html"),
+        members: path.resolve(__dirname, "members/index.html"),
+      },
+    },
   },
   define: {
     "process.env.SUPABASE_URL": JSON.stringify(process.env.SUPABASE_URL || ""),
