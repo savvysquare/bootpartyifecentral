@@ -5,8 +5,8 @@ import type { Database } from './types';
 // The anon key is a public/publishable credential — safe to embed in client-side code.
 // Using hardcoded values ensures we always connect to the correct project,
 // regardless of what environment variables Vercel may or may not have set.
-const SUPABASE_URL = "https://aspxddecqqosyyaxflcf.supabase.co";
-const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFzcHhkZGVjcXFvc3l5YXhmbGNmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkzNjUxNDEsImV4cCI6MjA5NDk0MTE0MX0.aFkVnKVih_jBtsrYs0yTF5SkvcX01AjY1IFpxXc3g0U";
+const SUPABASE_URL = "https://cgavgfseilfzxpwtczng.supabase.co";
+const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNnYXZnZnNlaWxmenhwd3Rjem5nIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkzODY1MjcsImV4cCI6MjA5NDk2MjUyN30.p-A1lALWb-gKLm2h6PiWMRc4AiKgNPFINIVZQKA4Da0";
 
 export const supabase = createClient<Database>(SUPABASE_URL, SUPABASE_ANON_KEY, {
   auth: {

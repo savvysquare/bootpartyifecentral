@@ -5,7 +5,7 @@ const MEMBERS_PASSWORD = "sterces";
 // These are public/publishable credentials — safe to embed server-side.
 // A SELECT RLS policy allows the anon key to read. The password above
 // is the access control gate for this endpoint.
-const SUPABASE_URL = "https://aspxddecqqosyyaxflcf.supabase.co";
+const SUPABASE_URL = "https://cgavgfseilfzxpwtczng.supabase.co";
 const SUPABASE_SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
 export default async function handler(req: any, res: any) {
